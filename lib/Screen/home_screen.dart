@@ -11,6 +11,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime selectedDate =
+  DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TopPart(),
+              _TopPart(selectedDate: selectedDate,),
               _Bottom_Part(),
             ],
           ),
@@ -29,18 +32,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  void onHeartPressed(){
+    DateTime now = DateTime.now();
+      showCupertinoDialog(
+        context: context,
+        // dialog 바깥 부분 터치시 닫힘
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+                color: Colors.white,
+                height: 300.0,
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: selectedDate,
+                  maximumDate: DateTime(
+                    now.year,
+                    now.month,
+                    now.day,
+                  ),
+                  onDateTimeChanged: (DateTime date) {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                )),
+          );
+        },
+      );
+  }
 }
 
-class _TopPart extends StatefulWidget {
-  const _TopPart({super.key});
+class _TopPart extends StatelessWidget {
+  final DateTime selectedDate;
+  final VoidCallback onPressed;
+  const _TopPart({super.key, required this.selectedDate, this.onPressed});
 
-  @override
-  State<_TopPart> createState() => _TopPartState();
-}
-
-class _TopPartState extends State<_TopPart> {
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -73,35 +101,7 @@ class _TopPartState extends State<_TopPart> {
           ]),
           IconButton(
             iconSize: 60.0,
-            onPressed: () {
-              showCupertinoDialog(
-                context: context,
-                // dialog 바깥 부분 터치시 닫힘
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                        color: Colors.white,
-                        height: 300.0,
-                        child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.date,
-                          initialDateTime: selectedDate,
-                          maximumDate: DateTime(
-                            now.year,
-                            now.month,
-                            now.day,
-                          ),
-                          onDateTimeChanged: (DateTime date) {
-                            setState(() {
-                              selectedDate = date;
-                            });
-                          },
-                        )),
-                  );
-                },
-              );
-            },
+            onPressed: onHeartPressed,
             icon: Icon(
               Icons.favorite,
               color: Colors.red,
