@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TopPart(selectedDate: selectedDate,),
+              _TopPart(selectedDate: selectedDate,
+              onPressed: onHeartPressed),
               _Bottom_Part(),
             ],
           ),
@@ -32,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  void onHeartPressed(){
+void onHeartPressed(){
     DateTime now = DateTime.now();
       showCupertinoDialog(
         context: context,
@@ -67,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class _TopPart extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onPressed;
-  const _TopPart({super.key, required this.selectedDate, this.onPressed});
+  const _TopPart({super.key, required this.selectedDate, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +100,7 @@ class _TopPart extends StatelessWidget {
           ]),
           IconButton(
             iconSize: 60.0,
-            onPressed: onHeartPressed,
+            onPressed: onPressed,
             icon: Icon(
               Icons.favorite,
               color: Colors.red,
